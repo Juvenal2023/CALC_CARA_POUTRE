@@ -1,0 +1,17 @@
+P actions make_etude
+P memjob 4096000
+P memory_limit 4096.0
+P mode interactif
+P mpi_nbcpu 1
+P mpi_nbnoeud 1
+P ncpus 1
+P nomjob MACR_CARA_POUTRE
+P time_limit 72000.0
+P tpsjob 1200
+P version stable
+A memjeveux 500.0
+A tpmax 45000.0
+F comm comm D  1
+F mmed $MED$.med D  20
+F rmed secpara.txt R  80
+F mess mess R  6

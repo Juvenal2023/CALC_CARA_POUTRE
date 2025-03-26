@@ -1,0 +1,94 @@
+DEBUT()
+
+import os
+import json
+
+
+case_dir = os.path.abspath(os.path.dirname(__file__))
+case_nom = os.path.basename(case_dir)
+json_path = os.path.join(os.path.dirname(os.path.dirname(case_dir)), "secpara1.json")
+
+macr_cara_poutre = {
+    "UNITE": 20,
+    "GROUP_MA_BORD": "Outer_Lines_1",
+    "GROUP_NO": "Rnd_Node_1",
+    "NOM": "Aster",
+    "ORIG_INER": [0.0, 0.0],
+    "TABLE_CARA": "OUI",
+}
+if case_nom.startswith("Tube") or case_nom.startswith("Hollow_Rectangle"):
+    macr_cara_poutre["GROUP_MA_INTE"] = "Inner_Lines_1"
+
+table = MACR_CARA_POUTRE(**macr_cara_poutre)
+
+IMPR_TABLE(TABLE=table,
+           UNITE=80)
+
+secpara = {
+    "LIEU": table["LIEU", 1],
+    "A": table["A", 1],
+    "IY": table["IY", 1],
+    "IZ": table["IZ", 1],
+    "AY": table["AY", 1],
+    "AZ": table["AZ", 1],
+    "EY": table["EY", 1],
+    "EZ": table["EZ", 1],
+    "JX": table["JX", 1],
+    "JG": table["JG", 1],
+    "IYR2": table["IYR2", 1],
+    "IZR2": table["IZR2", 1],
+    "RY": table["RY", 1],
+    "RZ": table["RZ", 1],
+    "RT": table["RT", 1],
+    "ALPHA": table["ALPHA", 1],
+    "CDG_Y": table["CDG_Y", 1],
+    "CDG_Z": table["CDG_Z", 1],
+}
+
+secpara_corr = secpara
+if secpara["ALPHA"] < 90:
+    pass
+elif 90 <= secpara["ALPHA"] < 180:
+    secpara_corr["ALPHA"]                      =  secpara["ALPHA"] - 90
+    secpara_corr["IY"]  , secpara_corr["IZ"]   =  secpara["IZ"]  ,  secpara["IY"]
+    secpara_corr["AY"]  , secpara_corr["AZ"]   =  secpara["AZ"]  ,  secpara["AY"]
+    secpara_corr["EY"]  , secpara_corr["EZ"]   = -secpara["EZ"]  ,  secpara["EY"]
+    secpara_corr["IYR2"], secpara_corr["IZR2"] =  secpara["IZR2"],  secpara["IYR2"]
+elif 180 <= secpara["ALPHA"] < 270:
+    secpara_corr["ALPHA"]                      =  secpara["ALPHA"] - 180
+    secpara_corr["EY"]  , secpara_corr["EZ"]   = -secpara["EY"]  , -secpara["EZ"]
+elif 270 <= secpara["ALPHA"] < 360:
+    secpara_corr["ALPHA"]                      =  secpara["ALPHA"] - 270
+    secpara_corr["IY"]  , secpara_corr["IZ"]   =  secpara["IZ"]  ,  secpara["IY"]
+    secpara_corr["AY"]  , secpara_corr["AZ"]   =  secpara["AZ"]  ,  secpara["AY"]
+    secpara_corr["EY"]  , secpara_corr["EZ"]   =  secpara["EZ"]  , -secpara["EY"]
+    secpara_corr["IYR2"], secpara_corr["IZR2"] =  secpara["IZR2"],  secpara["IYR2"]
+else:
+    raise ValueError(secpara["ALPHA"])
+
+
+def read_write_file(file_path: str, file_type: str="json", mode: str="r", encoding: str="utf-8", obj=None, lst=False):
+    if file_type not in ["json", "txt"]:
+        raise Exception("Invalid file type.")
+    try:
+        with open(file_path, mode=mode, encoding=encoding) as f:
+            if mode == "r":
+                return json.load(f) if file_type == "json" else (f.readlines() if lst is True else f.read())
+            elif mode == "w" and obj is not None:
+                json.dump(obj, f, indent=4) if file_type == "json" else f.write(obj)
+                return True
+            else:
+                raise Exception("Invalid mode or object.")
+    except FileNotFoundError:
+        raise Exception(f"File {file_path} does not exist.")
+    except json.JSONDecodeError:
+        raise Exception(f"Failed to decode JSON from file {file_path}.")
+    except Exception as e:
+        raise Exception(f"An unexpected error occurred: {e}")
+
+
+secpara_info = read_write_file(json_path)
+secpara_info[f"MACR_CARA_POUTRE_{case_nom}"] = secpara_corr
+read_write_file(json_path, mode="w", obj=secpara_info)
+
+FIN(PROC0="OUI")
