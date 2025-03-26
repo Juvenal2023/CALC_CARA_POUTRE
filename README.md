@@ -1,16 +1,45 @@
 # CALC_CARA_POUTRE
 
-## 介绍
+---
 
-```shell
-# 目录如下
-.
-├── auto_test # 资源文件夹，目前存放测试输入文件，后续可存放正式测试验证案例
-├── Template # comm和export文件模板
-├── BuildMesh.py # 使用salome自动建模功能
-├── Commands.py # 后端服务主流程
-├── Common.py # 封装好的业务功能接口
-├── Const.py # 一些常数定义
-├── main.py # 程序入口（开发环境）
-└── ModelDataCal.py # 模型数据总处理
+## Function
+
+Calculate the **Section Properties** of **Beam**
+
+---
+
+## Catalogue
+
+...
+
+├── SectionLibrary  # Section library
+
+│     ├── MACR_CARA_POUTRE  # Historical run cases for MACR_CARA_POUTRE method
+
+│     ├── Python_Package  # Historical run cases for 3rd-party Python package method
+
+│     ├── secpara1.json  # Database for MACR_CARA_POUTRE method
+
+│     └── secpara2.json  # Database for 3rd-party Python package method
+
+├── Template  # Template comm and export files
+
+├── BuildMesh.py  # Call SALOME service for parametric modeling
+
+├── Commands.py  # Main process
+
+├── Common.py  # General function interface
+
+├── Const.py  # Constant definition
+
+├── Formula.py  # Section properties calculation formula  **TODO**
+
+├── main.py  # Program entry (development environment)
+
+├── PyPackage.py  # Call 3rd-party Python package service
+
+└── TestResu.py  # Compare results with Ansys
+
+```
+
 ```

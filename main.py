@@ -99,28 +99,12 @@ if __name__ == "__main__":
         "SectionData": [
             5,  # 宽度 Width
             4,  # 高度 Height
-            0.3,  # 法兰厚度 Flange thickness
-            0.2,  # 腹板厚度 Web thickness
+            0.3,  # 下腿厚度 Bottom leg thickness
+            0.2,  # 左腿厚度 Left leg thickness
         ],
     }
     l_runInfo.append(runInfo)
     # ========== 角钢 Angle ==========
-
-    # # ========== 灌浆圆管 Concentric Tube ==========
-    # runInfo = {
-    #     "SectionType": 3,
-    #     "SectionData": {
-    #         "A": 10,  # 外直径 Outer diameter
-    #         "B": None,  # 外壁厚 Outer wall thickness
-    #         "C": None,  # 内直径 Inner diameter
-    #         "D": None,  # 内壁厚 Inner wall thickness
-    #         "E": None,
-    #     },
-    #     "Result_Accuracy": 2,  # 1: Coarse  |  2: Moderate  |  3: Fine
-    #     "Run_Directory": r"/home/juvenal/CALC_CARA_POUTRE/auto_test/CTB",
-    # }
-    # l_runInfo.append(runInfo)
-    # # ========== 灌浆圆管 Concentric Tube ==========
 
     # ========== 自定义截面 Custom ==========
     runInfo = {
@@ -129,6 +113,7 @@ if __name__ == "__main__":
             "Name": "Custom_1",
             "Outer": [(0, 0), (1, 0), (2, 3), (-1, 4)],
             "Inner": [(1, 1), (1.5, 3), (0, 2.5)],
+            # "Inner": None,  # If no inner points, set to None
         },
     }
     l_runInfo.append(runInfo)
